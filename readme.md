@@ -3,6 +3,7 @@
 install pnpm globally as it is our package manager
 
 ```npm i -g pnpm```
+
 clone the repo
 
 install dependencies
