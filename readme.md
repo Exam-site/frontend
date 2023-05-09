@@ -1,4 +1,4 @@
-# Steps before running
+# Steps before running 
 
 install pnpm globally as it is our package manager
 
