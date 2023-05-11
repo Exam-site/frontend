@@ -11,23 +11,41 @@ import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
 import img from '../assets/logo.png';
 import { Formik } from 'formik';
+import { number } from 'prop-types';
+import * as yup from "yup";
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import InputBox from './InputBox';
+import PropTypes from 'prop-types';
+import {toast }from 'react-toastify';
 
 
 
 
-export default function SignIn() {
+
+export default function SignIn({isadminlogin}) {
   const navigate=useNavigate()
-  
-
-      
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+  const studentSchema = yup.object().shape({
+    rollnumber:yup.string().max(8).required("Required"),
+    dob:yup.string().required("Required ")
     });
-  };
+  
+  const adminSchema = yup.object().shape({
+    email: yup.string().matches(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,{message:'Invalid email'}),
+    password:yup.string().required("Required ")
+    });
+    const {
+      register,
+      control,
+      handleSubmit,
+      formState: { errors }
+    } = useForm({
+      resolver: yupResolver(isadminlogin?adminSchema:studentSchema)
+    });
+    const onSubmit = data => {
+      console.log(JSON.stringify(data, null, 2));
+      toast.success('Signed In Successfully!')
+    };
   
 
   return (
@@ -54,54 +72,39 @@ export default function SignIn() {
           <img src={img} alt="logo" height='70px' width='70px' />
 
           <Typography component="h1" variant="h5">
-            Admin Sign in
+            Sign in
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            
-            <TextField 
-            sx={{
-              "& .MuiOutlinedInput-root":{
-                "& > fieldset": {
-                  borderColor: "#ffffff",
-                 }
-              }
-              
-            }}
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-              bordercolor="#ffffff"
-            />
-            <TextField
-              sx={{
-              "& .MuiOutlinedInput-root":{
-                "& > fieldset": {
-                  borderColor: "#ffffff",
-                  }
-              }
+          <Grid container spacing={2}>
+          
+          <Grid item xs={12}>
 
-              }}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            
+          <InputBox
+                controlname={ isadminlogin?'email':'rollnumber'}
+                errors={isadminlogin? errors.email:errors.rollnumber}
+                isRequired
+                type={isadminlogin?'email':'text'}
+                label={isadminlogin?'Email':'Roll Number'}
+                form={register}/>
+                </Grid>
+              <Grid item xs={12}>
+
+            <InputBox
+                controlname={ isadminlogin?'password':'dob'}
+                errors={isadminlogin? errors.password:errors.dob}
+                isRequired
+                type={isadminlogin?'password':'date'}
+                label={isadminlogin?'Password':''}
+                form={register}/>
+</Grid>   </Grid>         
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               color='secondary'
+              onClick={handleSubmit(onSubmit)}
+
             >
               Sign In
             </Button>
@@ -121,4 +124,10 @@ export default function SignIn() {
         </Box>
       </Container>
   );
+}
+SignIn.propTypes={
+  isadminlogin: PropTypes.bool
+}
+SignIn.defaultProps={
+  isadminlogin:false
 }
