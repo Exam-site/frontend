@@ -25,27 +25,20 @@ const themeDark = createTheme({
       main:'#f5ef56',
 
     },
+    
     background: {
       default: "#222222",
     },
     text:{
       primary:'#ffffff',
       secondary:'#ffffff',
-    }
+      disabled:'#ffffff',
+
+    },
+
   },
-  // components: {
-  //   MuiTextField: {
-  //     styleOverrides: {
-  //       root: sx({
-  //         "& .MuiOutlinedInput-root": {
-  //           "& > fieldset": {
-  //             borderColor: "orange",
-  //           },
-  //         },
-  //       }),
-  //     },
-  //   },
-  // }
+  
+  
 });
 
 

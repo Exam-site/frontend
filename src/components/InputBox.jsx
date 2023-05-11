@@ -24,6 +24,7 @@ function InputBox({type,controlname,errors,isautoFocused,label,isfullWidth,isReq
                   autoFocus={isautoFocused}
                   {...form(controlname)}
                   error={errors?true:false}
+                  maxlength
                 />
                 <Typography variant="inherit" color="#ff0000">
                 {errors?.message}
